@@ -3,6 +3,9 @@ import DataType from './DataType';
 export default class QueryBuilder {
     constructor(){
         this.sql = [];
+
+        this.tableName = "master";
+        this.identity = "id";
     }
 
     toString(){
@@ -21,13 +24,13 @@ export default class QueryBuilder {
         this.sql = [];
     }
     //table builder
-    create(tableName, func ){        
+    createTable(func){        
         func(this);
 
         for(let i = 0; i < this.sql.length - 1; i++ )
             this.sql[i].push(",");
 
-        this.sql.unshift(['CREATE', 'TABLE', 'IF NOT EXISTS', tableName, "("]);
+        this.sql.unshift(['CREATE', 'TABLE', 'IF NOT EXISTS', this.tableName, "("]);
         this.sql.push([")"]);
         return this;
     }
@@ -35,36 +38,43 @@ export default class QueryBuilder {
     // column type
     string(field){
         this.sql.push([field, DataType.TEXT]);
+        this[field];
         return this;
     }
 
     numeric(field){
         this.sql.push([field, DataType.NUMERIC]);
+        this[field];
         return this;
     }
 
     integer(field){
         this.sql.push([field, DataType.INTEGER]);
+        this[field];
         return this;
     }
 
     real(field){
         this.sql.push([field, DataType.REAL]);
+        this[field];
         return this;
     }
 
     datetime(field){
         this.sql.push([field, DataType.DATETIME]);
+        this[field];
         return this;
     }
 
     blob(field){
         this.sql.push([field, DataType.BLOB]);
+        this[field];
         return this;
     }
 
     boolean(field){
         this.sql.push([field, DataType.INTEGER]);
+        this[field];
         return this;
     }
 
@@ -131,6 +141,39 @@ export default class QueryBuilder {
             this.sql.push(['OR']);
 
         this.sql.push(query);
+
+        return this;
+    }
+
+    // order by
+    orderBy(field, asc = true){
+        this.sql.push(['ORDER BY', field, asc?'ASC':'DESC' ]);
+        return this;
+    }
+
+    // insert
+    insert(fields, values = null){
+        this.sql.push(['INSERT INTO', this.tableName+'('])
+
+        if(Array.isArray(fields)){
+            for(let i = 0; i<fields.length; i++){
+                this.sql.push( [ fields[i][0] ]);
+                if(i < fields.length - 1)
+                    this.sql.push([',']);
+            }
+
+            this.sql.push([')', 'VALUES', '(']);
+
+            for(let i = 0; i<fields.length; i++){
+                this.sql.push([ typeof fields[i][1] == 'string' ?`\'${fields[i][1]}\'` : fields[i][1] ]);
+                if(i < fields.length - 1)
+                    this.sql.push([',']);
+            }
+        }else{
+            this.sql.push([fields, ')', 'VALUES', '(', typeof values == 'string' ?`\'${values}\'` : values]);
+        }
+
+        this.sql.push([')']);
 
         return this;
     }
