@@ -12,6 +12,8 @@ export default class QueryBuilder {
             sqlquery += " " + this.sql[i].join(' ');
         }
 
+        this.clear();
+
         return sqlquery;
     }
 
@@ -88,17 +90,20 @@ export default class QueryBuilder {
 
         query.push(field);
 
-        if(!operand)
+        if(!operand){
             query.push('=');
-        else
             query.push(operator);
+        }
+        else{
+            query.push(operator);
+            query.push(operand);
+        }
 
-        query.push(operand);
 
-        if(this.sql[this.sql.length - 1][0] == 'WHERE')
+        if(this.sql.length > 1 && this.sql[this.sql.length - 1][0] == 'WHERE')
             this.sql.push(['AND']);
 
-        this.query.push(query);
+        this.sql.push(query);
 
         return this;
     }
@@ -115,10 +120,10 @@ export default class QueryBuilder {
 
         query.push(operand);
 
-        if(this.sql[this.sql.length - 1][0] == 'WHERE')
+        if(this.sql.length > 1 && this.sql[this.sql.length - 1][0] == 'WHERE')
             this.sql.push(['OR']);
 
-        this.query.push(query);
+        this.sql.push(query);
 
         return this;
     }

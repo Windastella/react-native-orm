@@ -7,3 +7,5 @@ console.log(qb.create('users',function(sql){
     sql.datetime('created_at');
     sql.datetime('updated_at');
 }).toString());
+
+console.log( qb.where('id',1).orWhere('created','>', Date.now() ).toString() );
