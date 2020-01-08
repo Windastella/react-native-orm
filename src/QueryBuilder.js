@@ -92,15 +92,17 @@ export default class QueryBuilder {
 
         if(!operand){
             query.push('=');
-            query.push(operator);
+            operand = operator
         }
-        else{
-            query.push(operator);
+        else
+            query.push(operator);  
+
+        if(typeof operand == 'string')
+            query.push(`\'${operand}\'`);
+        else
             query.push(operand);
-        }
 
-
-        if(this.sql.length > 1 && this.sql[this.sql.length - 1][0] == 'WHERE')
+        if(this.sql.length > 0 && this.sql[this.sql.length - 1][0] == 'WHERE')
             this.sql.push(['AND']);
 
         this.sql.push(query);
@@ -113,14 +115,19 @@ export default class QueryBuilder {
 
         query.push(field);
 
-        if(!operand)
+        if(!operand){
             query.push('=');
+            operand = operator
+        }
         else
-            query.push(operator);
+            query.push(operator);  
 
-        query.push(operand);
+        if(typeof operand == 'string')
+            query.push(`\'${operand}\'`);
+        else
+            query.push(operand);
 
-        if(this.sql.length > 1 && this.sql[this.sql.length - 1][0] == 'WHERE')
+        if(this.sql.length > 0 && this.sql[this.sql.length - 1][0] == 'WHERE')
             this.sql.push(['OR']);
 
         this.sql.push(query);
