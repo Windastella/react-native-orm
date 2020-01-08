@@ -1,13 +1,13 @@
 {
-  "name": "simpleorm",
+  "name": "@windastella/react-native-orm",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "node -r esm test.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Nik Mirza",
+  "license": "MIT",
   "dependencies": {
     "react-native-sqlite-storage": "^4.1.0"
   },
