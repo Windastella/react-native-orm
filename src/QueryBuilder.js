@@ -3,12 +3,16 @@ import DataType from './DataType';
 export default class QueryBuilder {
     constructor(){
         this.sql = [];
+        this.keys = [];
 
         this.tableName = "master";
         this.identity = "id";
+
+        this.fields(this);
+        this.clear();
     }
 
-    toString(){
+    toSqlString(){
         let sqlquery = "";
         
         for(let i = 0; i < this.sql.length; i++){
@@ -23,6 +27,7 @@ export default class QueryBuilder {
     clear(){
         this.sql = [];
     }
+
     //table builder
     createTable(func){        
         func(this);
@@ -38,43 +43,43 @@ export default class QueryBuilder {
     // column type
     string(field){
         this.sql.push([field, DataType.TEXT]);
-        this[field];
+        this.keys.push(field);
         return this;
     }
 
     numeric(field){
         this.sql.push([field, DataType.NUMERIC]);
-        this[field];
+        this.keys.push(field);
         return this;
     }
 
     integer(field){
         this.sql.push([field, DataType.INTEGER]);
-        this[field];
+        this.keys.push(field);
         return this;
     }
 
     real(field){
         this.sql.push([field, DataType.REAL]);
-        this[field];
+        this.keys.push(field);
         return this;
     }
 
     datetime(field){
         this.sql.push([field, DataType.DATETIME]);
-        this[field];
+        this.keys.push(field);
         return this;
     }
 
     blob(field){
         this.sql.push([field, DataType.BLOB]);
-        this[field];
+        this.keys.push(field);
         return this;
     }
 
     boolean(field){
         this.sql.push([field, DataType.INTEGER]);
-        this[field];
+        this.keys.push(field);
         return this;
     }
 
@@ -174,6 +179,26 @@ export default class QueryBuilder {
         }
 
         this.sql.push([')']);
+
+        return this;
+    }
+
+    // update
+    update(id, fields, values = null){
+        this.sql.push(['UPDATE', this.tableName, 'SET'])
+
+        if(Array.isArray(fields)){
+            for(let i = 0; i<fields.length; i++){
+                this.sql.push( [ fields[i][0],'=', typeof fields[i][1] == 'string' ?`\'${fields[i][1]}\'` :fields[i][1] ]);
+
+                if(i < fields.length - 1)
+                    this.sql.push([',']);
+            }
+        }else{
+            this.sql.push([fields, '=', typeof values == 'string' ?`\'${values}\'` : values]);
+        }
+
+        this.sql.push(['WHERE',this.identity,'=',id]);
 
         return this;
     }
