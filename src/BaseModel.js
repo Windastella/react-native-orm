@@ -127,7 +127,20 @@ export default class BaseModel extends QueryBuilder {
         return this;
     }
 
+    // relationship
+    async belongsTo(model, foreignkey, localkey){
+        return model.find(this[foreignkey]);
+    }
 
+    async hasOne(model, foreignkey, localkey){
+        return model.where(foreignkey, this[localkey]).first();
+    }
+
+    async hasMany(model, foreignkey, localkey){
+        return model.where(foreignkey, this[localkey]).get();
+    }
+
+    // serialization
     json(){
         let json = {};
 
