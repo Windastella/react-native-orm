@@ -1,10 +1,12 @@
-import SQLite from "react-native-sqlite-2";
+import Sqlite from './Sqlite';
 import Env from '../env.json';
 import QueryBuilder from './QueryBuilder';
 
 export default class BaseModel extends QueryBuilder {
     constructor(){
-        this.db = SQLite.openDatabase(`${Env.db.name}_${Env.db.version}.db`, Env.db.version);
+        super();
+
+        this.db = new Sqlite(Env.database.name, Env.database.version);
 
         this.tableName = "master";
         this.identity = "id";
@@ -13,7 +15,7 @@ export default class BaseModel extends QueryBuilder {
     }
 
     async migrate(){
-        this.query(this.create(this.tableName. this.fields));
+        this.db.query(this.create(this.tableName, this.fields).toString());
         this.clear();
     }
 
@@ -23,41 +25,31 @@ export default class BaseModel extends QueryBuilder {
         sql.datetime('updated_at');
     }
 
-    query( sql, params = [] ){
-        return new Promise((resolve, reject)=>{
-          this.db.transaction(txn=>{
-            txn.executeSql(sql, params, 
-            (tx, res) =>{
-              resolve(res);
-            },
-            reject);
-          }, reject);
-        });
-    }
-
-    transaction(trxFunc = ()=>{}){
-        return new Promise((resolve, reject)=>{
-          this.db.transaction(trxFunc, reject, resolve);
-        });
-    }
-
     async get(){
         let sqlquery = "";
         
         this.sql.unshift(['SELECT','*','FROM',this.tableName]);
 
-        for(sql in this.sql){
-            sqlquery += " ".sql.join(' ');
+        for(let i = 0; i < this.sql.length; i++){
+            sqlquery += " "+this.sql[i].join(' ');
         }
 
         this.clear();
 
-        return await this.query(sqlquery);
+        return this.db.query(sqlquery);
     }
 
     async find(id){
         this.where(this.identity, '=', id);
-        
-        return await this.get();
+        return (await this.get())[0];
+    }
+
+    async first(){
+        this.sql.push(['LIMIT', 1]);
+        return (await this.get())[0];
+    }
+
+    async all(){
+        return this.get();
     }
 }

@@ -61,3 +61,6 @@ buck-out/
 
 #environment file
 env.json
+
+*.db
+*.sqlite

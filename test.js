@@ -1,15 +1,15 @@
 import QueryBuilder from './src/QueryBuilder';
+import BaseModel from './src/BaseModel';
 
-let qb = new QueryBuilder();
+let model = new BaseModel();
 
-console.log(qb.create('users',function(sql){
-    sql.integer('id').primary().notnull().autoincrement();
-    sql.datetime('created_at');
-    sql.datetime('updated_at');
-}).toString());
+async function test(){
+    try{
+        let res = await model.find(2);
+        console.log(res);
+    }catch(ex){
+        console.error(ex);
+    }
+}
 
-let now = new Date();
-
-console.log( qb.where('id',1)
-    .orWhere('created','<', now.toISOString() )
-    .toString() );
+test();
