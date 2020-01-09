@@ -15,3 +15,4 @@ env.json
 
 *.db
 *.sqlite
+*.tgz

@@ -2,7 +2,7 @@
   "name": "@windastella/react-native-orm",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index",
   "scripts": {
     "test": "node -r esm test.js"
   },
@@ -15,5 +15,8 @@
     "esm": "^3.2.25",
     "metro-react-native-babel-preset": "^0.56.4",
     "sqlite3": "^4.1.1"
+  },
+  "react-native": {
+    "sqlite3":false
   }
 }
