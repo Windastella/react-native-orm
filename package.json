@@ -1,7 +1,12 @@
 {
   "name": "@windastella/react-native-orm",
   "version": "1.0.0",
-  "description": "",
+  "description": "Quick little orm for react-native",
+  "homepage":"https://github.com/Windastella/react-native-orm",
+  "repository": "github:Windastella/react-native-orm",
+  "bugs":{
+    "url": "https://github.com/Windastella/react-native-orm/issues"
+  },
   "main": "index",
   "scripts": {
     "test": "node -r esm test.js"
