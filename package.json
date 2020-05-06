@@ -1,6 +1,6 @@
 {
   "name": "@windastella/react-native-orm",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Quick little orm for react-native",
   "homepage": "https://github.com/Windastella/react-native-orm",
   "repository": "github:Windastella/react-native-orm",
