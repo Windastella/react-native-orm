@@ -22,7 +22,8 @@ class User extends BaseModel{
 
 async function test(){
     try{
-        let user = new User();        
+        let user = new User();
+        await user.migrate();        
         let users = await user.all();
         console.log( users.toArray() );
     }catch(ex){

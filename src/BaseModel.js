@@ -1,4 +1,4 @@
-import Sqlite from './Sqlite';
+import Sqlite from './Adapter/Sqlite';
 import QueryBuilder from './QueryBuilder';
 
 class ModelArray extends Array {
@@ -27,7 +27,7 @@ export default class BaseModel extends QueryBuilder {
     }
 
     async migrate(){
-        let sqlquery = this.createTable( this.fields ).toSqlString();       
+        let sqlquery = this.createTable( this.fields ).toSqlString();
         this.db.query(sqlquery);
     }
 
@@ -61,8 +61,6 @@ export default class BaseModel extends QueryBuilder {
     }
 
     async get(){        
-        let that = this;
-
         this.sql.unshift(['SELECT','*','FROM',this.tableName]);
 
         return this.run();

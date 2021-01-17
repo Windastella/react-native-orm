@@ -1,4 +1,4 @@
-import Platform from './JsPlatform';
+import Platform from '../JsPlatform';
 
 export default class Sqlite{
     constructor(dbname, dbversion){

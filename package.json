@@ -19,7 +19,7 @@
   "devDependencies": {
     "esm": "^3.2.25",
     "metro-react-native-babel-preset": "^0.56.4",
-    "sqlite3": "^4.2.0"
+    "sqlite3": "^5.0.1"
   },
   "react-native": {
     "sqlite3": false
